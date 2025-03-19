@@ -24,7 +24,7 @@ const isExpenseValid = (expense) => {
   });
 
   if (typeof expense.amount !== 'number') {
-    throw getErrorWithStatus(400, `Type of amount must be string`);
+    throw getErrorWithStatus(400, `Type of amount must be number`);
   }
 };
 
@@ -44,6 +44,8 @@ const getExpensesFilterQuery = (categories, userId, from, to) => {
   }
 
   if (to) {
+    // If both 'from' and 'to' are provided, this will overwrite the spentAt filter instead of merging the conditions.
+    // Consider conditionally adding the [Op.lte] condition to the existing spentAt filter.
     filter.spentAt = {
       ...filter.spentAt,
       [Op.lte]: new Date(to),
